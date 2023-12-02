@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="ClientID" />
+    </Key>
+    <Property Name="ClientID" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_Projects_Clients" FromRole="Clients" ToRole="Projects" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_Employees_Role1" FromRole="Employees" ToRole="Role" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_Projects_Employees" FromRole="Employees" ToRole="Projects" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_Users_Employees" FromRole="Employees" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="MaterialOrders">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="Int32" Nullable="false" />
+    <Property Name="MaterialID" Type="Int32" Nullable="false" />
+    <Property Name="QuantityOrdered" Type="Int32" Nullable="false" />
+    <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Materials" Relationship="Self.FK_MaterialOrders_Materials" FromRole="MaterialOrders" ToRole="Materials" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_MaterialOrders_Projects" FromRole="MaterialOrders" ToRole="Projects" />
+  </EntityType>
+  <EntityType Name="Materials">
+    <Key>
+      <PropertyRef Name="MaterialID" />
+    </Key>
+    <Property Name="MaterialID" Type="Int32" Nullable="false" />
+    <Property Name="MaterialName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="UnitOfMeasure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MaterialOrders" Relationship="Self.FK_MaterialOrders_Materials" FromRole="Materials" ToRole="MaterialOrders" />
+  </EntityType>
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <Property Name="ClientID" Type="Int32" Nullable="false" />
+    <Property Name="ProjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="PlannedEndDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ResponsibleEmployeeID" Type="Int32" />
+    <NavigationProperty Name="Clients" Relationship="Self.FK_Projects_Clients" FromRole="Projects" ToRole="Clients" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK_Projects_Employees" FromRole="Projects" ToRole="Employees" />
+    <NavigationProperty Name="MaterialOrders" Relationship="Self.FK_MaterialOrders_Projects" FromRole="Projects" ToRole="MaterialOrders" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <Property Name="NameRole" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Role1" FromRole="Role" ToRole="Employees" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UsersID" />
+    </Key>
+    <Property Name="UsersID" Type="Int32" Nullable="false" />
+    <Property Name="Login" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK_Users_Employees" FromRole="Users" ToRole="Employees" />
+  </EntityType>
+  <Association Name="FK_Projects_Clients">
+    <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+    <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="ClientID" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="ClientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Employees_Role1">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="Employees">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Projects_Employees">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+    <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="EmployeeID" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="ResponsibleEmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Employees">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="EmployeeID" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="UsersID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialOrders_Materials">
+    <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+    <End Role="MaterialOrders" Type="Self.MaterialOrders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Materials">
+        <PropertyRef Name="MaterialID" />
+      </Principal>
+      <Dependent Role="MaterialOrders">
+        <PropertyRef Name="MaterialID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialOrders_Projects">
+    <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+    <End Role="MaterialOrders" Type="Self.MaterialOrders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="MaterialOrders">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="Self.Clients" />
+    <EntitySet Name="Employees" EntityType="Self.Employees" />
+    <EntitySet Name="MaterialOrders" EntityType="Self.MaterialOrders" />
+    <EntitySet Name="Materials" EntityType="Self.Materials" />
+    <EntitySet Name="Projects" EntityType="Self.Projects" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_Projects_Clients" Association="Self.FK_Projects_Clients">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Projects" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employees_Role1" Association="Self.FK_Employees_Role1">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Employees" EntitySet="Employees" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Projects_Employees" Association="Self.FK_Projects_Employees">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="Projects" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Users_Employees" Association="Self.FK_Users_Employees">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialOrders_Materials" Association="Self.FK_MaterialOrders_Materials">
+      <End Role="Materials" EntitySet="Materials" />
+      <End Role="MaterialOrders" EntitySet="MaterialOrders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialOrders_Projects" Association="Self.FK_MaterialOrders_Projects">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="MaterialOrders" EntitySet="MaterialOrders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
